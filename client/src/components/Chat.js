@@ -8,7 +8,7 @@ import { useSocket } from "../context/SocketContext";
 import Message from "./Message";
 import Sidebar from "./Sidebar";
 
-function Chat({ username, room }) {
+function Chat({ username, room, onLeave }) {
     // 🔹 Récupération du socket via le Context
     const socket = useSocket();
     // 🔹 État local : liste des messages et contenu du champ de saisie
@@ -20,6 +20,14 @@ function Chat({ username, room }) {
     // 🔹 Référence pour scroller automatiquement vers le bas
     const messagesEndRef = useRef(null);
 
+    // quit
+    const leaveRoom = () =>{
+        setMessages([]);
+        setUsers([]);
+
+        onLeave();
+    };
+
     // ----------------------------------------------------------
     // useEffect : Abonnement aux événements Socket.io
     // ----------------------------------------------------------
@@ -30,7 +38,7 @@ function Chat({ username, room }) {
         const handleRoomUsers = (updatedUsers) => {
             setUsers(updatedUsers);
         };
-
+        
         socket.on("receive_message", handleReceiveMessage);
         socket.on("room_users", handleRoomUsers);
 
@@ -112,6 +120,10 @@ function Chat({ username, room }) {
                             <p>{users.length} participant{users.length > 1 ? "s" : ""}</p>
                         </div>
                     </div>
+                    {/* quitter */}
+                    <button className="leaveBtn" onClick={leaveRoom}>
+                        Quitter
+                    </button>
                 </div>
 
                 {/* Zone des messages */}

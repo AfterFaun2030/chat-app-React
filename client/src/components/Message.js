@@ -8,6 +8,8 @@ function Message({ msg, username }) {
     // 🔹 Déterminer si le message vient de l'utilisateur courant
     const isOwn = msg.author === username;
 
+    
+
     // 🔹 Messages système (quelqu'un rejoint/quitte)
     if (msg.system) {
         return (
@@ -29,6 +31,7 @@ function Message({ msg, username }) {
 
             {/* Heure d'envoi */}
             <span className="messageTime">{msg.time}</span>
+            {isOwn && <span className="messageSeen">✓✓</span>}
         </div>
     );
 }
